@@ -1,0 +1,133 @@
+$input-color: #7dbbc3;
+$button-color: #f4b9b2;
+$info-color: #daedbd;
+$comment-highlight-color: #de6b48;
+$danger-color: #de6b48;
+
+@mixin button($color) {
+  background-color: $color;
+  border: 1px solid darken($color, 10);
+  &:hover {
+    background-color: lighten($color, 10);
+  }
+  &:active {
+    background-color: lighten($color, 20);
+  }
+}
+
+html,
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  color: #2d3436;
+}
+
+body {
+  margin: 0;
+}
+
+
+.Application {
+  margin: auto;
+}
+
+.Authentication {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  align-items: center;
+}
+
+.logo {
+  width: 65%;
+  height: 20vh;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+
+}
+
+.logo img {
+  width: 100%;
+  max-width: 360px;
+  margin: auto
+}
+
+
+.SignInSocial {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 30vh;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+
+}
+
+
+.intro-img {
+  width: 17em;
+  height: 30vh;
+}
+
+.login-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.Game {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  align-items: center;
+}
+
+.PlayersInfo {
+  display: flex;
+  width: 95%;
+  height: 20vh;
+
+}
+
+.GameBoard {
+  display: flex;
+  width: 95%;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  height: 40vh;
+}
+
+.GameBoard img {
+  width: 30%;
+  margin:0;
+}
+
+.PlayerDeck {
+  display: flex;
+  width: 95%;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.PlayerDeck-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.PlayerDeck-title p {
+  margin: 0 auto;
+}
+
+.PlayerDeck img {
+  width: 12%;
+  margin:0;
+}
