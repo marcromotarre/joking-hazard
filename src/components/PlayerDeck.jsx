@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 
 class PlayerDeck extends Component {
   selectCard (index) {
-    this.props.selectCard(index);
+    if(!this.props.hasPlayerPlayedCard) {
+      this.props.selectCard(index);
+    }
   }
 
   renderImage(cardId, counter) {
@@ -18,9 +20,12 @@ class PlayerDeck extends Component {
     );
   }
   
-
   render() {
-    const {index, hand} = this.props
+    const {
+      hand,
+      playerSelectedCardIndex,
+      playerPlayedCardIndex,
+    } = this.props
 
     return (
       <div className="PlayerDeck">
@@ -28,8 +33,9 @@ class PlayerDeck extends Component {
           <p className="your-cards">YOUR CARDS</p>
         </div>
         {hand.map((cardId, counter) => {
-          return index !== counter ? this.renderImage(cardId, counter) : null
-
+          return (playerSelectedCardIndex !== counter && playerPlayedCardIndex !== counter) ? 
+            this.renderImage(cardId, counter) : 
+            null
         })}
       </div>
     );

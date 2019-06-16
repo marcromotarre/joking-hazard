@@ -21,7 +21,7 @@ class Authentication extends Component {
         </div>
         <SignInSocial />
         <div className="intro-img">
-          <img src={introImage} alt="intro-img" />;
+          <img src={introImage} alt="intro-img" />
         </div>
       </div>
     )

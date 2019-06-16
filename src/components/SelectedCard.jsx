@@ -2,24 +2,40 @@ import React, { Component } from 'react';
 
 
 class SelectedCard extends Component {
-  state = {
-    cardId: 1
+
+  playCard () {
+    this.props.playCard();
   }
-  
+
+  deselectCard () {
+    this.props.deselectCard();
+  }
+
   render() {
-    const cardId = this.state.cardId
+    const {
+      hasPlayerSelectedCard,
+      playerSelectedCardId,
+    } = this.props
+
     return (
       <div>
-        { cardId && 
+        { hasPlayerSelectedCard && 
           <div className="SelectedCard">
             <img 
-                key={`selected-card-${this.state.cardId}`}
-                className="player-deck-card" 
-                src={require(`../assets/cards/card-${this.state.cardId}.svg`)} 
-                alt="player-card"
-              />
+              key={`selected-card-${playerSelectedCardId}`}
+              className="selected-player-deck-card" 
+              src={require(`../assets/cards/card-${playerSelectedCardId}.svg`)} 
+              alt="selected-player-card"
+              onClick={() => this.playCard()}
+            />
+            <img 
+              key={`delete-selected-card`}
+              className="delete-selected-player-deck-card" 
+              src={require(`../assets/delete-icon.svg`)} 
+              alt="delete-selected-player-card"
+              onClick={() => this.deselectCard()}
+            />
           </div>
-
         }
       </div>
     );
