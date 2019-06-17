@@ -5,13 +5,13 @@ import 'firebase/storage';
 
 // Your web app's Firebase configuration
 const config = {
-  apiKey: "AIzaSyAGDj14qScf1VTkAUByWt148b0QfPwibBQ",
-  authDomain: "colors-187a0.firebaseapp.com",
-  databaseURL: "https://colors-187a0.firebaseio.com",
-  projectId: "colors-187a0",
-  storageBucket: "colors-187a0.appspot.com",
-  messagingSenderId: "821102756911",
-  appId: "1:821102756911:web:0cb2e083167ae7cc"
+  apiKey: "AIzaSyDZgXd2BrZ4PxFpf9_rzjnqv7j8FDwOfC0",
+  authDomain: "joking-hazard-the-game.firebaseapp.com",
+  databaseURL: "https://joking-hazard-the-game.firebaseio.com",
+  projectId: "joking-hazard-the-game",
+  storageBucket: "joking-hazard-the-game.appspot.com",
+  messagingSenderId: "613620128170",
+  appId: "1:613620128170:web:e9947e0d6ca2dc96"
 };
 // Initialize Firebase
 firebase.initializeApp(config);

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Switch, Route } from 'react-router-dom'
 
+import Init from './Init'
+import GameCreation from './GameCreation'
 import Game from './Game'
 import UserInfo from './UserInfo'
 
@@ -11,7 +13,9 @@ class Main extends Component {
     return (
       <div className="Application">
         <Switch>
+          <Route exact path="/" component={Init} />
           <Route exact path="/user" component={UserInfo} />
+          <Route exact path="/game_creation/:id" component={GameCreation} />
           <Route exact path="/game/:id" component={Game} />
         </Switch>
       </div>

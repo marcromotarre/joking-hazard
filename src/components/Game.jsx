@@ -7,9 +7,8 @@ import SelectedCard from './SelectedCard'
 
 
 class Game extends Component {
-
+  
   state = {
-
     deckRandomCardId: 2,
     judgePlayedCardId: 3,
 
@@ -33,8 +32,7 @@ class Game extends Component {
     ],
   }
 
-  getHandCardIdByIndex (index)
-  {
+  getHandCardIdByIndex (index) {
     return index >= 0 ? this.state.hand[index] : -1
   }
 
@@ -106,7 +104,6 @@ class Game extends Component {
             
             deletePlayerCard = { () => this.deletePlayerCard() }
             validatePlayerCard = { () => this.validatePlayerCard() }
-
           />
 
           <PlayerDeck 

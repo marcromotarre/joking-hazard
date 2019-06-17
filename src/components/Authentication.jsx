@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import SignInSocial from './SignInSocial'
 import mainLogo from '../assets/title.png';
-import introImage from '../assets/intro-1.svg';
+import introImage from '../assets/cards/card-drag-here.svg';
 
 class Authentication extends Component {
   state = { 
