@@ -8,8 +8,16 @@ class Init extends Component {
     searchGameName: '',
   }
 
-
   handleChange = event => {
+    const { name, value} = event.target;
+    this.setState({ [name]: value });
+  }
+
+  get pendingGamesRef () {
+    return firestore.collection(`pending_games`)
+  }
+
+  changeSearchGameName = event => {
     const { name, value} = event.target;
     this.setState({ [name]: value });
   }
@@ -17,35 +25,32 @@ class Init extends Component {
   joinGame = event => {
     event.preventDefault();
     const { searchGameName } = this.state;
+    this.pendingGamesRef.doc(`${searchGameName}`).get().then((gameInfo) => {
 
-    //try to add player into game
-    //if can go to creation 
-
-    //if can't show error message
-      // does not exist
-      // game is full
-
-    /*
-    if (displayName) {
-      this.userRef.update({ displayName });
-    }
-
-    if (this.file) {
-      storage
-        .ref()
-        .child('user-profiles')
-        .child(this.uid).child(this.file.name)
-        .put(this.file)
-        .then(response => response.ref.getDownloadURL())
-        .then(photoURL => this.userRef.update({ photoURL }))
-    }*/
+      if(gameInfo.data().players.length < 10) {
+        const { uid } = auth.currentUser || {};
+        let game = gameInfo.data()
+        
+        if(!game.players.find(player => player.uid === uid)) {
+          game.players.push({
+            faceId: 1,
+            uid: uid,
+          })
+          this.pendingGamesRef.doc(`${searchGameName}`)
+          .set({ ...game })
+          .then(() => {
+            console.log("Document successfully written!");
+            this.props.history.push(`/game_creation/${searchGameName}`)
+          })
+          .catch(function(error) {
+              console.error("Error writing document: ", error);
+          });
+        } else {
+          this.props.history.push(`/game_creation/${searchGameName}`)
+        }
+      }
+    })
   };
-
-
-  changeSearchGameName = event => {
-    const { name, value} = event.target;
-    this.setState({ [name]: value });
-  }
 
   createNewGame = async () => {
     console.log('create new game');
@@ -54,17 +59,24 @@ class Init extends Component {
     const game = {
       name: '',
       creator: uid,
-      players: [uid],
+      players: [{
+        uid: uid,
+        faceId: 1,
+      }],
+      gameScore: 3,
       started: false,
     }
-    let gameDocRef = await firestore.collection('games').add(game);
+    let gameDocRef = await this.pendingGamesRef.add(game);
     this.props.history.push(`/game_creation/${gameDocRef.id}`)
   }
 
   render() {
+    console.log(auth.currentUser)
+    const { uid } = auth.currentUser || {};
     
     return (
       <div className="Init">
+        <p>Hi {uid}</p>
         <form onSubmit={this.joinGame}>
           <input 
             type="text" 
