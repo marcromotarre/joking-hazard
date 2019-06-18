@@ -60,17 +60,17 @@ class GameBoard extends Component {
   }
 
   getFirstCard () {
-    return this.props.hasDeckGaveRandomCard ? this.props.deckRandomCardId : 'drag-here'
+    return this.props.hasDeckGaveRandomCard ? this.props.deckRandomCardId : 0
   }
 
   getSecondCard () {
-    return this.props.hasJudgePlayedCard ? this.props.judgePlayedCardId : 'drag-here'
+    return this.props.hasJudgePlayedCard ? this.props.judgePlayedCardId : 0
   }
 
   getThirCard () {
     if(this.props.hasPlayerPlayedCard) {
     }
-    return this.props.hasPlayerPlayedCard ? this.props.playerPlayedCardId : 'drag-here'
+    return this.props.hasPlayerPlayedCard ? this.props.playerPlayedCardId : 0
   }
 
   render() {

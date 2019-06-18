@@ -9,8 +9,8 @@ import SelectedCard from './SelectedCard'
 class Game extends Component {
   
   state = {
-    deckRandomCardId: 2,
-    judgePlayedCardId: 3,
+    deckRandomCardId: 9,
+    judgePlayedCardId: 8,
 
     playerSelectedCardIndex: -1,
     playerPlayedCardIndex: 4,
@@ -27,8 +27,8 @@ class Game extends Component {
       3,
       4,
       5,
-      1,
-      2,
+      6,
+      7,
     ],
   }
 
