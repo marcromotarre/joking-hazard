@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { firestore, auth  } from '../firebase';
+import { collectIdsAndDocs } from '../utilities';
+
 import PlayersInfo from './PlayersInfo'
 import GameBoard from './GameBoard'
 import PlayerDeck from './PlayerDeck'
@@ -9,27 +12,97 @@ import SelectedCard from './SelectedCard'
 class Game extends Component {
   
   state = {
-    deckRandomCardId: 9,
-    judgePlayedCardId: 8,
+    deckRandomCardId: -1,
+    judgePlayedCardId: -1,
 
     playerSelectedCardIndex: -1,
-    playerPlayedCardIndex: 4,
+    playerPlayedCardIndex: -1,
 
-    hasDeckGaveRandomCard: true,
-    hasJudgePlayedCard: true,
+    isPlayerJudge: false,
+
+    hasDeckGaveRandomCard: false,
+    hasJudgeSelectedCard: false,
+    hasJudgePlayedCard: false,
     hasPlayerSelectedCard: false,
-    hasPlayerPlayedCard: true,
+    hasPlayerPlayedCard: false,
     hasPlayerValidatedPlayedCard: false,
 
-    hand: [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-    ],
+    hand: [],
+    deck: [],
+  }
+
+  get gameId() {
+    return this.props.match.params.id;
+  }
+  get gamesRef () {
+    return firestore.collection(`games`)
+  }
+  unsubscribeFromGame = null;
+
+
+  componentDidMount = async () => {
+    this.unsubscribeFromGame = await this.gamesRef.doc(`${this.gameId}`).onSnapshot( snapshot => {
+      let game = collectIdsAndDocs(snapshot)
+      const { uid } = auth.currentUser || {};
+      const player = game.players.find( player => {
+        return player.uid === uid
+      })
+      const hand = (player) ? player.hand : [];
+      
+      const isPlayerJudge =  game.players[game.judgeIndex].uid === uid;
+
+
+      this.setState({ 
+        hand: hand,
+        hasDeckGaveRandomCard: game.hasDeckGaveCard,
+        deckRandomCardId: game.deckCard,
+
+        hasJudgeSelectedCard: game.hasJudgeSelectedCard,
+        hasJudgePlayedCard: game.hasJudgePlayCard,
+        judgePlayedCardId: -1,
+        judgeIndex: 0,
+        isPlayerJudge: isPlayerJudge,
+        deck: game,
+
+      })
+    })
+  }
+
+  getinformationText() {
+    const {
+      isPlayerJudge,
+      hasJudgeSelectedCard,
+      hasJudgePlayedCard,
+      hasPlayerSelectedCard,
+      hasPlayerPlayedCard
+    } = this.state
+
+    let displayText = 'this is text to display';
+    if(isPlayerJudge) {
+      if (!hasJudgeSelectedCard && !hasJudgePlayedCard){
+        displayText = 'Select a card'
+      }
+      if (hasJudgeSelectedCard && !hasJudgePlayedCard){
+        displayText = 'Validate your card'
+      }
+      if (hasJudgePlayedCard){}
+    } else {
+      if(!hasJudgePlayedCard){
+        displayText = 'Wait until judge play a card'
+      } else {
+        if(!hasPlayerSelectedCard && !hasPlayerPlayedCard) {
+          displayText = 'Select a card'
+        }
+        if(!hasPlayerSelectedCard && hasPlayerPlayedCard) {
+          displayText = 'Validate your card'
+        }
+      }
+    }
+    return (<p>{displayText}</p>);
+  }
+
+  componentWillUnmount = () => {
+      this.unsubscribeFromGame = null;
   }
 
   getHandCardIdByIndex (index) {
@@ -93,6 +166,7 @@ class Game extends Component {
       <div>
         <div className="Game">
           <PlayersInfo />
+          <div>{this.getinformationText()}</div>
           <GameBoard 
             hasDeckGaveRandomCard = {hasDeckGaveRandomCard}
             hasJudgePlayedCard = {hasJudgePlayedCard}

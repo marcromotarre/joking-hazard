@@ -63,6 +63,7 @@ class Init extends Component {
       }],
       gameScore: 3,
       started: false,
+      link: '',
     }
     let gameDocRef = await this.pendingGamesRef.add(game);
     this.props.history.push(`/game_creation/${gameDocRef.id}`)

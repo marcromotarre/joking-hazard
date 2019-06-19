@@ -7,6 +7,8 @@ class GameCreation extends Component {
   state = { 
     game: null,
     creatorName: '',
+    gameLink: '',
+    started: false,
   };
 
   get gameId() {
@@ -40,10 +42,10 @@ class GameCreation extends Component {
   componentDidMount = async () => {
     this.unsubscribeFromGame = await this.pendingGamesRef.doc(`${this.gameId}`).onSnapshot( snapshot => {
       let game = collectIdsAndDocs(snapshot)
-      console.log('Guije')
+      
       this.setState({ game })
       if(game && game.started) {
-        this.props.history.push(`/new_game/blabla`)
+        this.props.history.push(`/game/${game.link}`)
       }
     })
   }
@@ -76,7 +78,14 @@ class GameCreation extends Component {
         gameScore: pendingGame.gameScore,
         plays: [],
         deck: Array.from(Array(numberOfCards), (x, index) => index+1).sort(() => Math.random() - 0.5),
+        hasDeckGaveCard: false,
+        deckCard: -1,
+        hasJudgeSelectedCard: false,
+        hasJudgePlayedCard: false,
+        judgeCard: -1,
+        judgeIndex: 0,
       }
+
       game.players.sort(() => Math.random() - 0.5)
 
       game.players.forEach(player => { 
@@ -86,16 +95,22 @@ class GameCreation extends Component {
           return deckFirstCard;
         }))
         player.score = 0;
+        player.hasSelectedCard = false;
+        player.hasPlayedCard = false;
+        player.card = -1;
       });
-      await this.gamesRef.add(game);
+
+      game.hasDeckGaveCard = true;
+      game.deckCard = game.deck[0];
+      game.deck.shift();
+
+      const gameDocRef = await this.gamesRef.add(game);
       pendingGame.started = true;
+      pendingGame.link = gameDocRef.id;
 
       this.pendingGamesRef
         .doc(`${this.gameId}`)
         .set({ ...pendingGame })
-        .then(() => {
-          this.setState({ game: pendingGame })
-        })
     }
   }
 
