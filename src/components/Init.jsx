@@ -39,7 +39,6 @@ class Init extends Component {
           this.pendingGamesRef.doc(`${searchGameName}`)
           .set({ ...game })
           .then(() => {
-            console.log("Document successfully written!");
             this.props.history.push(`/game_creation/${searchGameName}`)
           })
           .catch(function(error) {
@@ -53,7 +52,6 @@ class Init extends Component {
   };
 
   createNewGame = async () => {
-    console.log('create new game');
     const { uid } = auth.currentUser || {};
 
     const game = {

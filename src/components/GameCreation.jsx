@@ -40,16 +40,16 @@ class GameCreation extends Component {
   componentDidMount = async () => {
     this.unsubscribeFromGame = await this.pendingGamesRef.doc(`${this.gameId}`).onSnapshot( snapshot => {
       let game = collectIdsAndDocs(snapshot)
-      console.log(game)
+      console.log('Guije')
       this.setState({ game })
+      if(game && game.started) {
+        this.props.history.push(`/new_game/blabla`)
+      }
     })
   }
 
   componentWillUnmount = () => {
-    this.unsubscribeFromGame();
-  }
-
-  addPlayer () {
+      this.unsubscribeFromGame = null;
   }
 
   showPlayer (player) {
@@ -68,15 +68,25 @@ class GameCreation extends Component {
 
       //create new document
       let pendingGame = {...this.state.game}
-
-      const game = {
+      const numberOfCards = 36;
+      let game = {
         name: '',
         creator: pendingGame.creator,
-        players: [],
+        players: pendingGame.players,
         gameScore: pendingGame.gameScore,
-        plays: []
+        plays: [],
+        deck: Array.from(Array(numberOfCards), (x, index) => index+1).sort(() => Math.random() - 0.5),
       }
+      game.players.sort(() => Math.random() - 0.5)
 
+      game.players.forEach(player => { 
+        player.hand = Array.from(Array(7), ((x) => {
+          const deckFirstCard = game.deck[0];
+          game.deck.shift();
+          return deckFirstCard;
+        }))
+        player.score = 0;
+      });
       await this.gamesRef.add(game);
       pendingGame.started = true;
 
@@ -84,7 +94,7 @@ class GameCreation extends Component {
         .doc(`${this.gameId}`)
         .set({ ...pendingGame })
         .then(() => {
-            this.setState({ game: pendingGame })
+          this.setState({ game: pendingGame })
         })
     }
   }
@@ -113,9 +123,6 @@ class GameCreation extends Component {
     */
   
    const { uid } = auth.currentUser || {};
-    if(this.state.game &&  this.state.game.started) {
-      this.props.history.push(`/new_game/blabla`)
-    }
     return (
 
       <div className="GameCreation">

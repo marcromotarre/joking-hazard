@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 class SignUp extends Component {
   
   goToSignIn() {
-    console.log('clock')
     this.props.setSignIn(true)
   }
 
