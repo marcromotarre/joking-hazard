@@ -80,9 +80,6 @@ class GameCreation extends Component {
         deck: Array.from(Array(numberOfCards), (x, index) => index+1).sort(() => Math.random() - 0.5),
         hasDeckGaveCard: false,
         deckCard: -1,
-        hasJudgeSelectedCard: false,
-        hasJudgePlayedCard: false,
-        judgeCard: -1,
         judgeIndex: 0,
       }
 
@@ -97,7 +94,8 @@ class GameCreation extends Component {
         player.score = 0;
         player.hasSelectedCard = false;
         player.hasPlayedCard = false;
-        player.card = -1;
+        player.hasValidatedCard = false;
+        player.cardIndex = -1;
       });
 
       game.hasDeckGaveCard = true;

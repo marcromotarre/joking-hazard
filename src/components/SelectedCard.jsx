@@ -4,7 +4,11 @@ import React, { Component } from 'react';
 class SelectedCard extends Component {
 
   playCard () {
-    this.props.playCard();
+    //only if can
+    if((this.props.isPlayerJudge && !this.props.hasJudgeValidatedPlayedCard) ||  
+       (!this.props.isPlayerJudge && this.props.hasJudgeValidatedPlayedCard) ) {
+        this.props.playCard();
+       }
   }
 
   deselectCard () {
