@@ -81,9 +81,10 @@ class GameCreation extends Component {
         hasDeckGaveCard: false,
         deckCard: -1,
         judgeIndex: 0,
+        judgePlayedCardId: -1,
       }
 
-      game.players.sort(() => Math.random() - 0.5)
+      //game.players.sort(() => Math.random() - 0.5)
 
       game.players.forEach(player => { 
         player.hand = Array.from(Array(7), ((x) => {

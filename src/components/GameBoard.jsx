@@ -24,11 +24,11 @@ class GameBoard extends Component {
 
   validateIcons() {
     const {
-      hasPlayerValidatedPlayedCard,
+      hasPlayerValidatedCard,
       hasPlayerPlayedCard,
     } = this.props
 
-    const deleteIconClass = hasPlayerValidatedPlayedCard ? 
+    const deleteIconClass = hasPlayerValidatedCard ? 
       'delete-player-played-card_validated':
       'delete-player-played-card'
 
@@ -43,7 +43,7 @@ class GameBoard extends Component {
             alt="delete-player-played-card"
             onClick={() => this.deletePlayerCard()}
           />
-          { !hasPlayerValidatedPlayedCard  &&
+          { !hasPlayerValidatedCard  &&
             <img 
               key={`validate-played-card`}
               className="validate-player-played-card" 
@@ -65,13 +65,20 @@ class GameBoard extends Component {
 
   getSecondCard () {
     if(this.props.isPlayerJudge) {
-      return this.props.hasPlayerPlayedCard ? this.props.playerPlayedCardId : 0;
+      if(this.props.hasJudgePlayedCard) {
+        return this.props.judgeCardId;
+      } else if(this.props.hasPlayerPlayedCard) {
+        return this.props.playerPlayedCardId;
+      } else {
+        return 0;
+      }
     } else {
-      return this.props.hasJudgePlayedCard ? this.props.judgePlayedCardId : 0;
+      return this.props.hasJudgePlayedCard ? this.props.judgeCardId : 0;
     }
   }
 
   getThirCard () {
+    //its not working when player has validated
     if(this.props.isPlayerJudge) {
     return 0;
     } else {

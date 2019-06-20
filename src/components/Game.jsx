@@ -15,14 +15,14 @@ class Game extends Component {
     hand: [],
     hasPlayerPlayedCard: false,
     hasPlayerSelectedCard: false,
-    hasPlayerValidatedPlayedCard: false,
+    hasPlayerValidatedCard: false,
     playerCardIndex: -1,
 
     deckRandomCardId: -1,
     isPlayerJudge: false,
 
     hasDeckGaveRandomCard: false,
-    judgePlayedCardId: -1,
+    judgeCardId: -1,
     hasJudgePlayedCard: false,
     hasAllPlayersPlayedCard: false,
   }
@@ -64,16 +64,16 @@ class Game extends Component {
         hand: hand,
         hasPlayerPlayedCard: player.hasPlayedCard,
         hasPlayerSelectedCard: player.hasSelectedCard,
-        hasPlayerValidatedPlayedCard: player.hasValidatedCard,
+        hasPlayerValidatedCard: player.hasValidatedCard,
         playerCardIndex: player.cardIndex,
 
         deckRandomCardId: game.deckCard,
         isPlayerJudge: isPlayerJudge,
 
         hasDeckGaveRandomCard: game.hasDeckGaveCard,
-        judgePlayedCardId: this.getCardIdByIndex(judge.hand, judge.cardIndex),
+        judgeCardId: game.judgeCardId,
         hasJudgePlayedCard: judge.hasValidatedCard,
-        hasAllPlayersPlayedCard: game.players.filter(player =>  {return player.hasValidatedCard === false}),
+        hasAllPlayersPlayedCard: game.players.filter(player =>  {return player.hasValidatedCard === false}).length === 0,
       })
     })
   }
@@ -81,30 +81,40 @@ class Game extends Component {
   getinformationText() {
     const {
       isPlayerJudge,
-      hasJudgeSelectedCard,
-      hasJudgePlayedCard,
+      hasPlayerPlayedCard,
       hasPlayerSelectedCard,
-      hasPlayerPlayedCard
+      hasPlayerValidatedCard,
+      hasAllPlayersPlayedCard,
+
+      hasJudgePlayedCard,
+
     } = this.state
 
     let displayText = 'this is text to display';
     if(isPlayerJudge) {
-      if (!hasJudgeSelectedCard && !hasJudgePlayedCard){
+      if (!hasPlayerPlayedCard && !hasPlayerValidatedCard){
         displayText = 'Select a card'
-      }
-      if (hasJudgeSelectedCard && !hasJudgePlayedCard){
+      } else if (hasPlayerPlayedCard){
         displayText = 'Validate your card'
+      } else if (hasPlayerValidatedCard){
+        if(!hasAllPlayersPlayedCard) {
+          displayText = 'Wait until players play their cards'
+        } else {
+          displayText = 'Time to judge!'
+        }
       }
-      if (hasJudgePlayedCard){}
     } else {
       if(!hasJudgePlayedCard){
         displayText = 'Wait until judge play a card'
       } else {
-        if(!hasPlayerSelectedCard && !hasPlayerPlayedCard) {
+        if (!hasPlayerPlayedCard && !hasPlayerValidatedCard){
           displayText = 'Select a card'
-        }
-        if(!hasPlayerSelectedCard && hasPlayerPlayedCard) {
+        } else if( !hasPlayerValidatedCard) {
           displayText = 'Validate your card'
+        } else if (!hasAllPlayersPlayedCard) {
+          displayText = 'Wait until other players play their cards'
+        } else if(hasPlayerValidatedCard) {
+          displayText = 'Wait until judge validate your card'
         }
       }
     }
@@ -148,17 +158,23 @@ class Game extends Component {
   }
 
   validatePlayerCard = async () => {
-    const gameInfo = collectIdsAndDocs(await this.gamesRef.doc(`${this.gameId}`).get());
+    let gameInfo = collectIdsAndDocs(await this.gamesRef.doc(`${this.gameId}`).get());
     
     let currentPlayer = this.getCurrentPlayer(gameInfo.players);
+    if(this.state.isPlayerJudge) {
+      gameInfo.judgeCardId = currentPlayer.hand[currentPlayer.cardIndex];
+      currentPlayer.hand.splice(currentPlayer.cardIndex, 1);
+    }
+    
     currentPlayer.hasPlayedCard = false;
     currentPlayer.hasValidatedCard = true;
-
-    //should remove card from hand and add it to the board
-
     this.gamesRef.doc(`${this.gameId}`).update({
+      judgeCardId: gameInfo.judgeCardId,
       players: gameInfo.players,
     });
+
+
+
   }
 
   deletePlayerCard = async () => {
@@ -181,8 +197,6 @@ class Game extends Component {
     
     let currentPlayer = this.getCurrentPlayer(gameInfo.players);
     currentPlayer.hasSelectedCard = false;
-    currentPlayer.hasPlayedCard = false;
-    currentPlayer.hasValidatedCard = false;
     currentPlayer.cardIndex = -1;
 
     this.gamesRef.doc(`${this.gameId}`).update({
@@ -195,17 +209,18 @@ class Game extends Component {
       hand,
       hasPlayerPlayedCard,
       hasPlayerSelectedCard,
-      hasPlayerValidatedPlayedCard,
+      hasPlayerValidatedCard,
       playerCardIndex,
 
       deckRandomCardId,
       isPlayerJudge,
 
       hasDeckGaveRandomCard,
-      judgePlayedCardId,
+      judgeCardId,
       hasJudgePlayedCard,
       hasAllPlayersPlayedCard,
     } = this.state
+    
     return (
       <div>
         <div className="Game">
@@ -217,8 +232,8 @@ class Game extends Component {
             hasJudgePlayedCard = { hasJudgePlayedCard }
             hasPlayerPlayedCard = { hasPlayerPlayedCard }
             deckRandomCardId = { deckRandomCardId }
-            judgePlayedCardId = { judgePlayedCardId }
-            hasPlayerValidatedPlayedCard = { hasPlayerValidatedPlayedCard }
+            judgeCardId = { judgeCardId }
+            hasPlayerValidatedCard = { hasPlayerValidatedCard }
             playerPlayedCardId = { this.getHandCardIdByIndex(playerCardIndex) }
             
             deletePlayerCard = { () => this.deletePlayerCard() }
@@ -239,8 +254,8 @@ class Game extends Component {
         <SelectedCard 
           isPlayerJudge = { isPlayerJudge }
           hasPlayerSelectedCard = { hasPlayerSelectedCard }
-          playerSelectedCardId = { this.getHandCardIdByIndex(playerCardIndex) }
-          hasJudgeValidatedPlayedCard = { this.state.hasJudgeValidatedPlayedCard }
+          cardId = { this.getHandCardIdByIndex(playerCardIndex) }
+          hasJudgePlayedCard = { hasJudgePlayedCard }
           deselectCard = { () => this.deselectCard() }
           playCard = { () => this.playCard() }
         />

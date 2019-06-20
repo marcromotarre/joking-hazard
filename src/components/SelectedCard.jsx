@@ -5,8 +5,8 @@ class SelectedCard extends Component {
 
   playCard () {
     //only if can
-    if((this.props.isPlayerJudge && !this.props.hasJudgeValidatedPlayedCard) ||  
-       (!this.props.isPlayerJudge && this.props.hasJudgeValidatedPlayedCard) ) {
+    if((this.props.isPlayerJudge && !this.props.hasJudgePlayedCard) ||  
+       (!this.props.isPlayerJudge && this.props.hasJudgePlayedCard) ) {
         this.props.playCard();
        }
   }
@@ -18,7 +18,7 @@ class SelectedCard extends Component {
   render() {
     const {
       hasPlayerSelectedCard,
-      playerSelectedCardId,
+      cardId,
     } = this.props
 
     return (
@@ -26,9 +26,9 @@ class SelectedCard extends Component {
         { hasPlayerSelectedCard && 
           <div className="SelectedCard">
             <img 
-              key={`selected-card-${playerSelectedCardId}`}
+              key={`selected-card-${cardId}`}
               className="selected-player-deck-card" 
-              src={require(`../assets/cards/card-${playerSelectedCardId}.svg`)} 
+              src={require(`../assets/cards/card-${cardId}.svg`)} 
               alt="selected-player-card"
               onClick={() => this.playCard()}
             />
