@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { auth } from 'firebase-admin';
 
 class GameBoard extends Component {
   
@@ -55,56 +54,50 @@ class GameBoard extends Component {
           </div>
         }
       </div>
-
     )
   }
 
-  getFirstCard () {
-    return this.props.hasDeckGaveRandomCard ? this.props.deckRandomCardId : 0;
-  }
-
-  getSecondCard () {
-    if(this.props.isPlayerJudge) {
-      if(this.props.hasJudgePlayedCard) {
-        return this.props.judgeCardId;
-      } else if(this.props.hasPlayerPlayedCard) {
-        return this.props.playerPlayedCardId;
-      } else {
-        return 0;
-      }
-    } else {
-      return this.props.hasJudgePlayedCard ? this.props.judgeCardId : 0;
-    }
-  }
-
-  getThirCard () {
-    //its not working when player has validated
-    if(this.props.isPlayerJudge) {
-    return 0;
-    } else {
-      return this.props.hasPlayerPlayedCard ? this.props.playerPlayedCardId : 0;
-    }
-
-  }
-
   render() {
-    const gameBoardCards = [
-      this.getFirstCard (),
-      this.getSecondCard (),
-      this.getThirCard (),
-    ]
+    const {
+      hasDeckGaveRandomCard,
+      deckRandomCardId,
+
+      hasJudgePlayedCard,
+      judgeCardId,
+
+      hasPlayerPlayedCard,
+      hasPlayerValidatedCard,
+      playerPlayedCardId,
+    } = this.props
+
+    const _deckRandomCardId = hasDeckGaveRandomCard ? deckRandomCardId : 0
+    
+    let gameBoardCards;
+    if(this.props.isPlayerJudge) {
+      let _judgeCardId;
+      if(hasPlayerPlayedCard) {
+        _judgeCardId = playerPlayedCardId;
+      } else if (hasPlayerValidatedCard) {
+        _judgeCardId = judgeCardId
+      } else {
+        _judgeCardId = 0
+      }
+      gameBoardCards = [_deckRandomCardId, _judgeCardId, 0];
+    } else {
+      const _judgeCardId = (hasJudgePlayedCard) ? judgeCardId : 0
+      const _playerCard = (hasPlayerPlayedCard || hasPlayerValidatedCard) ? playerPlayedCardId : 0
+      gameBoardCards = [_deckRandomCardId, _judgeCardId, _playerCard];
+    }
+    
     return (
       <div className="GameBoard">
         {gameBoardCards.map((cardId, counter) => 
           this.renderImage(cardId, counter)
         )}
-
         {this.validateIcons()}
-        
       </div>
     );
   }
 }
-
 
 export default GameBoard;

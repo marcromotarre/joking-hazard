@@ -26,14 +26,13 @@ class PlayerDeck extends Component {
       playerSelectedCardIndex,
       playerPlayedCardIndex,
     } = this.props
-
     return (
       <div className="PlayerDeck">
         <div className="PlayerDeck-title">
           <p className="your-cards">YOUR CARDS</p>
         </div>
         {hand.map((cardId, counter) => {
-          return (playerSelectedCardIndex !== counter && playerPlayedCardIndex !== counter) ? 
+          return (playerSelectedCardIndex !== counter && playerPlayedCardIndex !== counter && playerPlayedCardIndex !== counter) ? 
             this.renderImage(cardId, counter) : 
             null
         })}
