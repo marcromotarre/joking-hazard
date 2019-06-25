@@ -26,7 +26,7 @@ class GameCreation extends Component {
 
 
   get usersRef() {
-    return firestore.doc(`users/`)
+    return firestore.collection(`users`)
   }
 
   get creatorRef() {
@@ -93,6 +93,7 @@ class GameCreation extends Component {
           game.deck.shift();
           return deckFirstCard;
         }))
+        //get player name and face id
         player.score = 0;
         player.hasSelectedCard = false;
         player.hasPlayedCard = false;

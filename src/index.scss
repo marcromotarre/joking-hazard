@@ -189,7 +189,12 @@ body {
   width: 35px;
   position: absolute;
   bottom: 310px; right: 90px;
- 
+}
+
+.PlayersInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 

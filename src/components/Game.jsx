@@ -21,6 +21,8 @@ class Game extends Component {
     deckRandomCardId: -1,
     isPlayerJudge: false,
 
+    judgeId: '',
+
     hasDeckGaveRandomCard: false,
     judgeCardId: -1,
     hasJudgePlayedCard: false,
@@ -43,7 +45,7 @@ class Game extends Component {
       let judge = getPlayerById(game.players, game.players[game.judgeIndex].uid);
       const hand = (player) ? player.hand : [];
 
-      const isPlayerJudge =  game.players[game.judgeIndex].uid === uid;
+      const judgeId = game.players[game.judgeIndex].uid;
       const hasAllPlayersPlayedCard = game.players.filter(player =>  {return player.hasValidatedCard === false}).length === 0
       this.setState({ 
         players: game.players,
@@ -55,7 +57,9 @@ class Game extends Component {
         playerPlayedCardIndex: player.playedCardIndex,
 
         deckRandomCardId: game.deckCard,
-        isPlayerJudge: isPlayerJudge,
+
+        judgeId: judgeId,
+        isPlayerJudge: judgeId === uid,
 
         hasDeckGaveRandomCard: game.hasDeckGaveCard,
         judgeCardId: game.judgeCardId,
@@ -152,6 +156,7 @@ class Game extends Component {
       playerPlayedCardIndex,
 
       deckRandomCardId,
+      judgeId,
       isPlayerJudge,
 
       hasDeckGaveRandomCard,
@@ -165,6 +170,8 @@ class Game extends Component {
         <div className="Game">
           <PlayersInfo 
             players = { players }
+            judgeId = { judgeId }
+            hasJudgePlayedCard = { hasJudgePlayedCard }
           />
           <GameTextInformation 
             isPlayerJudge = { isPlayerJudge }

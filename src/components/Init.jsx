@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { firestore, auth } from '../firebase'
+import { collectIdsAndDocs } from '../utilities';
 
 
 class Init extends Component {
@@ -13,6 +14,10 @@ class Init extends Component {
     this.setState({ [name]: value });
   }
 
+  get usersRef() {
+    return firestore.collection(`users`)
+  }
+
   get pendingGamesRef () {
     return firestore.collection(`pending_games`)
   }
@@ -22,44 +27,34 @@ class Init extends Component {
     this.setState({ [name]: value });
   }
 
-  joinGame = event => {
-    event.preventDefault();
+  joinGame = async () => {
     const { searchGameName } = this.state;
-    this.pendingGamesRef.doc(`${searchGameName}`).get().then((gameInfo) => {
-
-      if(gameInfo.data().players.length < 10) {
-        const { uid } = auth.currentUser || {};
-        let game = gameInfo.data()
-        
-        if(!game.players.find(player => player.uid === uid)) {
-          game.players.push({
-            faceId: 1,
-            uid: uid,
-          })
-          this.pendingGamesRef.doc(`${searchGameName}`)
-          .set({ ...game })
-          .then(() => {
-            this.props.history.push(`/game_creation/${searchGameName}`)
-          })
-          .catch(function(error) {
-              console.error("Error writing document: ", error);
-          });
-        } else {
-          this.props.history.push(`/game_creation/${searchGameName}`)
-        }
+    const game = collectIdsAndDocs(await this.pendingGamesRef.doc(`${searchGameName}`).get());
+    if(game.players.length < 10) {
+      const { uid } = auth.currentUser || {};
+      if(!game.players.find(player => player.uid === uid)) {
+        const user = collectIdsAndDocs( await this.usersRef.doc(`${uid}`).get())
+        game.players.push({
+          displayName: user.displayName,
+          faceId: parseInt(user.faceId),
+          uid: uid,
+        })
+        await this.pendingGamesRef.doc(`${searchGameName}`).set({ ...game })
       }
-    })
+      this.props.history.push(`/game_creation/${searchGameName}`)
+    }
   };
 
   createNewGame = async () => {
     const { uid } = auth.currentUser || {};
-
+    const userInfo = collectIdsAndDocs(await this.usersRef.doc(`${uid}`).get());
     const game = {
       name: '',
       creator: uid,
       players: [{
+        displayName: userInfo.displayName,
         uid: uid,
-        faceId: 1,
+        faceId: parseInt(userInfo.faceId),
       }],
       gameScore: 3,
       started: false,
@@ -76,16 +71,16 @@ class Init extends Component {
     return (
       <div className="Init">
         <p>Hi {uid}</p>
-        <form onSubmit={this.joinGame}>
-          <input 
-            type="text" 
-            value={this.state.searchGameName} 
-            name="searchGameName" 
-            onChange={this.changeSearchGameName} 
-            placeholder="Search Game Name"
-          />
-          <input className="update" type="submit" />
-        </form>
+        
+        <input 
+          type="text" 
+          value={this.state.searchGameName} 
+          name="searchGameName" 
+          onChange={this.changeSearchGameName} 
+          placeholder="Search Game Name"
+        />
+        <button onClick={this.joinGame}>join game</button>
+        
 
 
         <button onClick={this.createNewGame}>Create new game</button>

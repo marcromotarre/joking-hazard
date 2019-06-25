@@ -3,6 +3,11 @@ import React, { Component } from 'react';
 class PlayersInfo extends Component {
 
   renderPlayer(player) {
+    const {
+      judgeId,
+      hasJudgePlayedCard,
+    } = this.props
+
     return (
         <div
             key={`player-image-${player.uid}`}
@@ -13,6 +18,21 @@ class PlayersInfo extends Component {
             alt="player-card" 
           />
           <p>{player.displayName}</p>
+          <p>Scrore: {player.score}</p>
+          {judgeId === player.uid && 
+            <img 
+              className="judge-icon" 
+              src={require(`../assets/judge-icon.svg`)} 
+              alt="judge-icon" 
+            />
+          }
+          {judgeId !== player.uid && !player.hasValidatedCard && hasJudgePlayedCard && 
+            <img 
+              className="judge-icon" 
+              src={require(`../assets/cards-icon.svg`)} 
+              alt="judge-icon" 
+            />
+          }
         </div>
     );
   }
