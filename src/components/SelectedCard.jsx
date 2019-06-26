@@ -2,12 +2,13 @@ import React, { Component } from "react";
 
 class SelectedCard extends Component {
   playCard() {
-    //only if can
     if (
       (this.props.isPlayerJudge && !this.props.hasJudgePlayedCard) ||
       (!this.props.isPlayerJudge && this.props.hasJudgePlayedCard)
     ) {
-      this.props.playCard();
+      if (!this.props.hasPlayerValidatedCard) {
+        this.props.playCard();
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import { collectIdsAndDocs, getPlayerById } from "../utilities";
 
 import PlayersInfo from "./PlayersInfo";
 import GameBoard from "./GameBoard";
+import GameBoardJudgement from "./GameBoardJudgement";
 import PlayerDeck from "./PlayerDeck";
 import SelectedCard from "./SelectedCard";
 import GameTextInformation from "./GameTextInformation";
@@ -26,7 +27,10 @@ class Game extends Component {
     hasDeckGaveRandomCard: false,
     judgeCardId: -1,
     hasJudgePlayedCard: false,
-    hasAllPlayersPlayedCard: false
+    hasAllPlayersPlayedCard: false,
+
+    judgementPlayedCardsRandomized: [],
+    judgementCardIndex: 0
   };
 
   get gameId() {
@@ -55,6 +59,7 @@ class Game extends Component {
           game.players.filter(player => {
             return player.hasValidatedCard === false;
           }).length === 0;
+
         this.setState({
           players: game.players,
           hand: hand,
@@ -135,6 +140,23 @@ class Game extends Component {
       judgeCardId: gameInfo.judgeCardId,
       players: gameInfo.players
     });
+
+    //check if its last!!!
+  };
+
+  deselectCard = async () => {
+    const gameInfo = collectIdsAndDocs(
+      await this.gamesRef.doc(`${this.gameId}`).get()
+    );
+    const { uid } = auth.currentUser ? auth.currentUser : {};
+    let currentPlayer = getPlayerById(gameInfo.players, uid);
+
+    currentPlayer.hasSelectedCard = false;
+    currentPlayer.selectedCardIndex = -1;
+
+    this.gamesRef.doc(`${this.gameId}`).update({
+      players: gameInfo.players
+    });
   };
 
   deletePlayerCard = async () => {
@@ -172,7 +194,6 @@ class Game extends Component {
       hasJudgePlayedCard,
       hasAllPlayersPlayedCard
     } = this.state;
-
     return (
       <div>
         <div className="Game">
@@ -181,48 +202,65 @@ class Game extends Component {
             judgeId={judgeId}
             hasJudgePlayedCard={hasJudgePlayedCard}
           />
-          <GameTextInformation
-            isPlayerJudge={isPlayerJudge}
-            hasPlayerPlayedCard={hasPlayerPlayedCard}
-            hasPlayerSelectedCard={hasPlayerSelectedCard}
-            hasPlayerValidatedCard={hasPlayerValidatedCard}
-            hasAllPlayersPlayedCard={hasAllPlayersPlayedCard}
-            hasJudgePlayedCard={hasJudgePlayedCard}
-          />
-          <GameBoard
-            isPlayerJudge={isPlayerJudge}
-            hasDeckGaveRandomCard={hasDeckGaveRandomCard}
-            hasJudgePlayedCard={hasJudgePlayedCard}
-            hasPlayerPlayedCard={hasPlayerPlayedCard}
-            hasPlayerValidatedCard={hasPlayerValidatedCard}
-            deckRandomCardId={deckRandomCardId}
-            judgeCardId={judgeCardId}
-            playerPlayedCardId={this.getHandCardIdByIndex(
-              playerPlayedCardIndex
-            )}
-            deletePlayerCard={() => this.deletePlayerCard()}
-            validatePlayerCard={() => this.validatePlayerCard()}
-          />
+          {!hasAllPlayersPlayedCard && (
+            <GameTextInformation
+              isPlayerJudge={isPlayerJudge}
+              hasPlayerPlayedCard={hasPlayerPlayedCard}
+              hasPlayerSelectedCard={hasPlayerSelectedCard}
+              hasPlayerValidatedCard={hasPlayerValidatedCard}
+              hasAllPlayersPlayedCard={hasAllPlayersPlayedCard}
+              hasJudgePlayedCard={hasJudgePlayedCard}
+            />
+          )}
+          {!hasAllPlayersPlayedCard && (
+            <GameBoard
+              isPlayerJudge={isPlayerJudge}
+              hasDeckGaveRandomCard={hasDeckGaveRandomCard}
+              hasJudgePlayedCard={hasJudgePlayedCard}
+              hasPlayerPlayedCard={hasPlayerPlayedCard}
+              hasPlayerValidatedCard={hasPlayerValidatedCard}
+              deckRandomCardId={deckRandomCardId}
+              judgeCardId={judgeCardId}
+              playerPlayedCardId={this.getHandCardIdByIndex(
+                playerPlayedCardIndex
+              )}
+              deletePlayerCard={() => this.deletePlayerCard()}
+              validatePlayerCard={() => this.validatePlayerCard()}
+            />
+          )}
 
-          <PlayerDeck
-            hand={hand}
-            hasPlayerSelectedCard={hasPlayerSelectedCard}
-            hasPlayerPlayedCard={hasPlayerPlayedCard}
-            playerSelectedCardIndex={playerSelectedCardIndex}
-            playerPlayedCardIndex={playerPlayedCardIndex}
-            selectCard={index => this.selectCard(index)}
-          />
+          {hasAllPlayersPlayedCard && (
+            <GameBoardJudgement
+              firstCardId={deckRandomCardId}
+              secondCardId={judgeCardId}
+              thirdCardId={judgeCardId}
+            />
+          )}
+
+          {!hasAllPlayersPlayedCard && (
+            <PlayerDeck
+              hand={hand}
+              hasPlayerSelectedCard={hasPlayerSelectedCard}
+              hasPlayerPlayedCard={hasPlayerPlayedCard}
+              playerSelectedCardIndex={playerSelectedCardIndex}
+              playerPlayedCardIndex={playerPlayedCardIndex}
+              selectCard={index => this.selectCard(index)}
+            />
+          )}
         </div>
 
-        <SelectedCard
-          {...this.state}
-          isPlayerJudge={isPlayerJudge}
-          hasPlayerSelectedCard={hasPlayerSelectedCard}
-          cardId={this.getHandCardIdByIndex(playerSelectedCardIndex)}
-          hasJudgePlayedCard={hasJudgePlayedCard}
-          deselectCard={() => this.deletePlayerCard()}
-          playCard={() => this.playCard()}
-        />
+        {!hasAllPlayersPlayedCard && (
+          <SelectedCard
+            {...this.state}
+            hasPlayerValidatedCard={hasPlayerSelectedCard}
+            isPlayerJudge={isPlayerJudge}
+            hasPlayerSelectedCard={hasPlayerSelectedCard}
+            cardId={this.getHandCardIdByIndex(playerSelectedCardIndex)}
+            hasJudgePlayedCard={hasJudgePlayedCard}
+            deselectCard={() => this.deselectCard()}
+            playCard={() => this.playCard()}
+          />
+        )}
       </div>
     );
   }

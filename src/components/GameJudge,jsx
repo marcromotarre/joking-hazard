@@ -1,0 +1,11 @@
+/*
+
+          {hasAllPlayersPlayedCard && (
+            <GameBoardJudgement
+              firstCardId={deckRandomCardId}
+              secondCardId={judgeCardId}
+              thirdCardId={judgeCardId}
+            />
+          )}
+
+*/

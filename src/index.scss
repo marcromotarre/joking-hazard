@@ -195,3 +195,48 @@ body {
   flex-direction: row;
   justify-content: space-around;
 }
+
+.GameBoardJudgement {
+  display: grid;
+  grid-template-columns: 150px 150px 150px;
+  grid-template-rows: 100px 200px 100px;
+}
+
+.judgement-card {
+  place-self: center;
+}
+
+.judgement-card-previous {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.judgement-card-actual-0 {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.judgement-card-actual-1 {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.judgement-card-actual-2 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.judgement-card-next {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
