@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import SignInSocial from './SignInSocial';
+import React, { Component } from "react";
+import SignInSocial from "./SignInSocial";
 
 class SignIn extends Component {
-
-  state = { email: '', password: '' };
+  state = { email: "", password: "" };
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -13,12 +12,12 @@ class SignIn extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    this.setState({ email: '', password: '' });
+    this.setState({ email: "", password: "" });
   };
 
   goToSignUp() {
-    this.props.setSignIn(false)
-  };
+    this.props.setSignIn(false);
+  }
 
   render() {
     const { email, password } = this.state;
@@ -41,11 +40,11 @@ class SignIn extends Component {
             value={password}
             onChange={this.handleChange}
           />
-          <p>Dont' have an account?</p><p onClick={() => this.goToSignUp()}>Register</p>
+          <p>Dont' have an account?</p>
+          <p onClick={() => this.goToSignUp()}>Register</p>
         </form>
         <SignInSocial />
       </div>
-
     );
   }
 }

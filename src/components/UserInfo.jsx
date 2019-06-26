@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { signOut } from '../firebase';
-
-
+import { signOut } from "../firebase";
 
 class UserInfo extends Component {
   render() {

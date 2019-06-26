@@ -1,5 +1,5 @@
-import React, { Component, createContext } from 'react'
-import { auth, createUserProfileDocument } from '../firebase'
+import React, { Component, createContext } from "react";
+import { auth, createUserProfileDocument } from "../firebase";
 
 export const UserContext = createContext({ user: null });
 
@@ -9,29 +9,25 @@ class UserProvider extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount = async () => {
-
-    this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
         userRef.onSnapshot(snapshot => {
-          this.setState({ user: {uid: snapshot.id, ...snapshot.data()} })
+          this.setState({ user: { uid: snapshot.id, ...snapshot.data() } });
         });
       }
-      this.setState({ user: userAuth })
-    })
-    
+      this.setState({ user: userAuth });
+    });
   };
 
   componentWillUnmout = () => {
-    this.unsubscribeFromAuth()
-  }
+    this.unsubscribeFromAuth();
+  };
 
-  render () {
+  render() {
     const { user } = this.state;
     const { children } = this.props;
-    return (
-      <UserContext.Provider value={user}>{children}</UserContext.Provider>
-    )
+    return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
   }
 }
 

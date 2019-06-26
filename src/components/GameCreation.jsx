@@ -1,98 +1,95 @@
-import React, { Component } from 'react';
-import { firestore, auth  } from '../firebase';
-import { collectIdsAndDocs } from '../utilities';
+import React, { Component } from "react";
+import { firestore, auth } from "../firebase";
+import { collectIdsAndDocs } from "../utilities";
 
 class GameCreation extends Component {
-
-  state = { 
+  state = {
     game: null,
-    creatorName: '',
-    gameLink: '',
-    started: false,
+    creatorName: "",
+    gameLink: "",
+    started: false
   };
 
   get gameId() {
     return this.props.match.params.id;
   }
 
-  get pendingGamesRef () {
-    return firestore.collection(`pending_games`)
+  get pendingGamesRef() {
+    return firestore.collection(`pending_games`);
   }
 
-  get gamesRef () {
-    return firestore.collection(`games`)
+  get gamesRef() {
+    return firestore.collection(`games`);
   }
-
-
 
   get usersRef() {
-    return firestore.collection(`users`)
+    return firestore.collection(`users`);
   }
 
   get creatorRef() {
-    return firestore.doc(`users/${this.state.game.creator}`)
+    return firestore.doc(`users/${this.state.game.creator}`);
   }
 
   get gameRef() {
-    return firestore.doc(`games/${this.gameId}`)
+    return firestore.doc(`games/${this.gameId}`);
   }
-  
+
   unsubscribeFromGame = null;
 
   componentDidMount = async () => {
-    this.unsubscribeFromGame = await this.pendingGamesRef.doc(`${this.gameId}`).onSnapshot( snapshot => {
-      let game = collectIdsAndDocs(snapshot)
-      
-      this.setState({ game })
-      if(game && game.started) {
-        this.props.history.push(`/game/${game.link}`)
-      }
-    })
-  }
+    this.unsubscribeFromGame = await this.pendingGamesRef
+      .doc(`${this.gameId}`)
+      .onSnapshot(snapshot => {
+        let game = collectIdsAndDocs(snapshot);
+
+        this.setState({ game });
+        if (game && game.started) {
+          this.props.history.push(`/game/${game.link}`);
+        }
+      });
+  };
 
   componentWillUnmount = () => {
-      this.unsubscribeFromGame = null;
-  }
+    this.unsubscribeFromGame = null;
+  };
 
-  showPlayer (player) {
+  showPlayer(player) {
     return (
-      <div
-        key={`player-info-${player.uid}`}
-      >
+      <div key={`player-info-${player.uid}`}>
         <p> - {player.uid} </p>
       </div>
-    )
+    );
   }
 
   startGame = async event => {
-
-    if(this.state.game.players.length > 2) {
-
+    if (this.state.game.players.length > 2) {
       //create new document
-      let pendingGame = {...this.state.game}
+      let pendingGame = { ...this.state.game };
       const numberOfCards = 36;
       let game = {
-        name: '',
+        name: "",
         creator: pendingGame.creator,
         players: pendingGame.players,
         gameScore: pendingGame.gameScore,
         plays: [],
-        deck: Array.from(Array(numberOfCards), (x, index) => index+1).sort(() => Math.random() - 0.5),
+        deck: Array.from(Array(numberOfCards), (x, index) => index + 1).sort(
+          () => Math.random() - 0.5
+        ),
         hasDeckGaveCard: false,
         deckCard: -1,
         judgeIndex: 0,
         judgePlayedCardId: -1,
-        playersCards : []
-      }
+        playersCards: []
+      };
 
       //game.players.sort(() => Math.random() - 0.5)
 
-      game.players.forEach(player => { 
-        player.hand = Array.from(Array(7), ((x) => {
+      game.players.forEach(player => {
+        player.hand = Array.from(Array(7), x => {
           const deckFirstCard = game.deck[0];
           game.deck.shift();
           return deckFirstCard;
-        }))
+        });
         //get player name and face id
         player.score = 0;
         player.hasSelectedCard = false;
@@ -110,11 +107,9 @@ class GameCreation extends Component {
       pendingGame.started = true;
       pendingGame.link = gameDocRef.id;
 
-      this.pendingGamesRef
-        .doc(`${this.gameId}`)
-        .set({ ...pendingGame })
+      this.pendingGamesRef.doc(`${this.gameId}`).set({ ...pendingGame });
     }
-  }
+  };
 
   render() {
     /*
@@ -138,34 +133,35 @@ class GameCreation extends Component {
         </div>
       </div>
     */
-  
-   const { uid } = auth.currentUser || {};
-    return (
 
+    const { uid } = auth.currentUser || {};
+    return (
       <div className="GameCreation">
         <p>Hi {uid}</p>
-        {this.state.game &&
+        {this.state.game && (
           <div>
             <div className="game-name">
-            <p>game id: {this.gameId}</p>
+              <p>game id: {this.gameId}</p>
             </div>
             <div className="creator-info">
-              <p>created by</p><p>{this.state.game.creator}</p>
+              <p>created by</p>
+              <p>{this.state.game.creator}</p>
             </div>
-              <p>Players List: </p>
-              {this.state.game && this.state.game.players.map((playerId) => {
-                return this.showPlayer(playerId) 
+            <p>Players List: </p>
+            {this.state.game &&
+              this.state.game.players.map(playerId => {
+                return this.showPlayer(playerId);
               })}
-            {this.state.game && this.state.game.creator === uid && this.state.game.players.length > 2 &&
-              <button onClick={this.startGame}>Start</button>
-            }
+            {this.state.game &&
+              this.state.game.creator === uid &&
+              this.state.game.players.length > 2 && (
+                <button onClick={this.startGame}>Start</button>
+              )}
           </div>
-
-        }
+        )}
       </div>
     );
   }
 }
-
 
 export default GameCreation;

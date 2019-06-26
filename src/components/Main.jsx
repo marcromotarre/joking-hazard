@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
-import {Switch, Route } from 'react-router-dom'
+import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 
-import Init from './Init'
-import GameCreation from './GameCreation'
-import Game from './Game'
-import UserInfo from './UserInfo'
-import NewGame from './NewGame'
-
-
+import Init from "./Init";
+import GameCreation from "./GameCreation";
+import Game from "./Game";
+import UserInfo from "./UserInfo";
+import NewGame from "./NewGame";
 
 class Main extends Component {
   render() {

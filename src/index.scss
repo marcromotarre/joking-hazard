@@ -5,10 +5,10 @@ $comment-highlight-color: #de6b48;
 $danger-color: #de6b48;
 
 @font-face {
-  font-family: 'Creative Block BB';
+  font-family: "Creative Block BB";
   font-style: normal;
   font-weight: 400;
-  src: url('../src/assets/fonts/CREABBRG.TTF'); /* IE9 Compat Modes */
+  src: url("../src/assets/fonts/CREABBRG.TTF"); /* IE9 Compat Modes */
 }
 
 @mixin button($color) {
@@ -34,7 +34,6 @@ body {
   margin: 0;
 }
 
-
 .Application {
   margin: auto;
 }
@@ -53,15 +52,13 @@ body {
   padding: 20px 0;
   display: flex;
   align-items: center;
-
 }
 
 .logo img {
   width: 100%;
   max-width: 360px;
-  margin: auto
+  margin: auto;
 }
-
 
 .SignInSocial {
   display: flex;
@@ -71,9 +68,7 @@ body {
   align-items: center;
   width: 100%;
   max-width: 300px;
-
 }
-
 
 .intro-img {
   width: 17em;
@@ -97,7 +92,6 @@ body {
   display: flex;
   width: 95%;
   height: 20vh;
-
 }
 
 .GameBoard {
@@ -114,7 +108,7 @@ body {
 .board-card {
   width: 30%;
   max-width: 120px;
-  margin:0;
+  margin: 0;
 }
 
 .PlayerDeck {
@@ -135,60 +129,65 @@ body {
 
 .PlayerDeck-title p {
   margin: 0 auto;
-  font-family: 'Creative Block BB';
+  font-family: "Creative Block BB";
   font-style: normal;
 }
 
 .PlayerDeck img {
   width: 16%;
   max-width: 60px;
-  margin:0;
+  margin: 0;
 }
-
 
 .selected-player-deck-card {
   width: 40%;
   position: absolute;
   max-width: 170px;
   margin: auto;
-  left: 0; bottom: 50px; right: 0;
+  left: 0;
+  bottom: 50px;
+  right: 0;
 }
 
 .delete-selected-player-deck-card {
   width: 25px;
   margin: auto;
   position: absolute;
-  left: 0; bottom: 282px; right: 0;
- 
+  left: 0;
+  bottom: 282px;
+  right: 0;
 }
-
 
 .delete-selected-player-deck-card {
   width: 25px;
   margin: auto;
   position: absolute;
-  left: 0; bottom: 282px; right: 0;
- 
+  left: 0;
+  bottom: 282px;
+  right: 0;
 }
 
 .delete-player-played-card {
   width: 35px;
   margin: auto;
   position: absolute;
-  bottom: 484px; right: 90px;
+  bottom: 484px;
+  right: 90px;
 }
 
 .delete-player-played-card_validated {
   width: 20px;
   margin: auto;
   position: absolute;
-  bottom: 490px; right: 100px;
+  bottom: 490px;
+  right: 100px;
 }
 
 .validate-player-played-card {
   width: 35px;
   position: absolute;
-  bottom: 310px; right: 90px;
+  bottom: 310px;
+  right: 90px;
 }
 
 .PlayersInfo {
@@ -196,5 +195,3 @@ body {
   flex-direction: row;
   justify-content: space-around;
 }
-
-

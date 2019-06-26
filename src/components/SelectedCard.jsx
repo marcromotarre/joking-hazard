@@ -1,52 +1,46 @@
-import React, { Component } from 'react';
-
+import React, { Component } from "react";
 
 class SelectedCard extends Component {
-
-  playCard () {
+  playCard() {
     //only if can
-    if((this.props.isPlayerJudge && !this.props.hasJudgePlayedCard) ||  
-       (!this.props.isPlayerJudge && this.props.hasJudgePlayedCard) ) {
-        this.props.playCard();
-       }
+    if (
+      (this.props.isPlayerJudge && !this.props.hasJudgePlayedCard) ||
+      (!this.props.isPlayerJudge && this.props.hasJudgePlayedCard)
+    ) {
+      this.props.playCard();
+    }
   }
 
-  deselectCard () {
+  deselectCard() {
     this.props.deselectCard();
   }
 
   render() {
-    const {
-      hasPlayerSelectedCard,
-      cardId,
-    } = this.props
+    const { hasPlayerSelectedCard, cardId } = this.props;
 
     return (
       <div>
-        { hasPlayerSelectedCard && 
+        {hasPlayerSelectedCard && (
           <div className="SelectedCard">
-            <img 
+            <img
               key={`selected-card-${cardId}`}
-              className="selected-player-deck-card" 
-              src={require(`../assets/cards/card-${cardId}.svg`)} 
+              className="selected-player-deck-card"
+              src={require(`../assets/cards/card-${cardId}.svg`)}
               alt="selected-player-card"
               onClick={() => this.playCard()}
             />
-            <img 
+            <img
               key={`delete-selected-card`}
-              className="delete-selected-player-deck-card" 
-              src={require(`../assets/delete-icon.svg`)} 
+              className="delete-selected-player-deck-card"
+              src={require(`../assets/delete-icon.svg`)}
               alt="delete-selected-player-card"
               onClick={() => this.deselectCard()}
             />
           </div>
-        }
+        )}
       </div>
     );
   }
 }
 
 export default SelectedCard;
-
-
-
