@@ -240,3 +240,129 @@ body {
   grid-row-start: 3;
   grid-row-end: 3;
 }
+
+.g-judgement {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  background-color: blue;
+  grid-template-columns: auto;
+  grid-template-rows: 25% 50% 25%;
+}
+
+.g-playersinfo {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 50% 50%;
+  background-color: #888;
+}
+
+.g-playersrow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.g-playerinfo {
+  background-color: #444;
+  width: 20%;
+  height: 100%;
+  color: #000;
+}
+
+.g-playerinfo:nth-child(even) {
+  background-color: #ccc;
+  width: 20%;
+  height: 100%;
+  color: #000;
+}
+
+.g-gameboard {
+  display: grid;
+  width: 100%;
+
+  padding-left: 1%;
+  grid-column-gap: 1%;
+  grid-template-columns: 32% 32% 32%;
+
+  grid-template-rows: 25% 50% 25%;
+  border: 1px solid #000;
+  height: 50vh;
+}
+
+.g-slider {
+  grid-area: 1 / 3 / 3 / 3;
+}
+
+.g-gameboard-previous {
+  grid-column: 3;
+  grid-row: 1;
+  background: darkgreen;
+  align-self: center;
+}
+
+.g-gameboard-actual {
+  grid-row: 2;
+  background: yellow;
+  align-self: center;
+}
+
+.g-gameboard-card-1 {
+  max-height: 24vh;
+  grid-column: 1;
+  background: green;
+  align-self: center;
+}
+
+.g-gameboard-card-center {
+  max-height: 24vh;
+  align-self: center;
+}
+
+.g-gameboard-card-small {
+  max-height: 10vh;
+  align-self: center;
+}
+
+.g-gameboard-card-2 {
+  max-height: 24vh;
+  grid-column: 2;
+  background: red;
+  align-self: center;
+}
+
+.g-gameboard-card-3 {
+  grid-area: 1/3/4/3;
+}
+
+.g-gameboard-next {
+  grid-column: 3;
+  grid-row: 3;
+  background: darkgreen;
+  align-self: center;
+}
+
+.g-judge-actions {
+  background: darkorchid;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.g-judge-action {
+  background: whitesmoke;
+  width: 30%;
+  height: 50%;
+}
+
+.g-playerhand {
+  width: 100%;
+  display: grid;
+  grid-gap: 0%;
+  grid-template-columns: repeat(7, 14.3%);
+  grid-template-rows: auto;
+  border: 1px solid #000;
+  height: 20vh;
+}
