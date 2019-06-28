@@ -292,10 +292,6 @@ body {
   height: 50vh;
 }
 
-.g-slider {
-  grid-area: 1 / 3 / 3 / 3;
-}
-
 .g-gameboard-previous {
   grid-column: 3;
   grid-row: 1;
@@ -309,10 +305,10 @@ body {
   align-self: center;
 }
 
-.g-gameboard-card-1 {
-  max-height: 24vh;
-  grid-column: 1;
-  background: green;
+.g-gameboard-next {
+  grid-column: 3;
+  grid-row: 3;
+  background: darkgreen;
   align-self: center;
 }
 
@@ -321,8 +317,124 @@ body {
   align-self: center;
 }
 
+.black {
+  background: black;
+  animation: rotate 10s infinite linear;
+}
+
+@keyframes card-actual-to-previous {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+  100% {
+    transform: translate(0px, -18.75vh) scale(0.4, 0.4);
+  }
+}
+
+@keyframes card-actual-to-next {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+  100% {
+    transform: translate(0px, 18.75vh) scale(0.4, 0.4);
+  }
+}
+
+@keyframes card-previous-to-actual {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+  100% {
+    transform: translate(0px, 18.75vh) scale(2.4, 2.4);
+  }
+}
+
+@keyframes card-next-to-actual {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+  100% {
+    transform: translate(0px, -18.75vh) scale(2.4, 2.4);
+  }
+}
+
+@keyframes card-previous-to-next {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(0px, 5vh) scale(0.5, 0.5);
+    opacity: 0;
+  }
+
+  51% {
+    transform: translate(0px, 32.5vh) scale(0.5, 0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(0px, 37.5vh) scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes card-next-to-previous {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(0px, -5vh) scale(0.5, 0.5);
+    opacity: 0;
+  }
+
+  51% {
+    transform: translate(0px, -32.5vh) scale(0.5, 0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(0px, -37.5vh) scale(1, 1);
+    opacity: 1;
+  }
+}
+
+.g-animation-actual-to-previous {
+  animation: card-actual-to-previous 0.2s 1 ease;
+}
+
+.g-animation-actual-to-next {
+  animation: card-actual-to-next 0.2s 1 ease;
+}
+
+.g-animation-previous-to-actual {
+  animation: card-previous-to-actual 0.2s 1 ease;
+}
+
+.g-animation-next-to-actual {
+  animation: card-next-to-actual 0.2s 1 ease;
+}
+
+.g-animation-previous-to-next {
+  animation: card-previous-to-next 0.2s 1 ease;
+}
+
+.g-animation-next-to-previous {
+  animation: card-next-to-previous 0.2s 1 ease;
+}
+
 .g-gameboard-card-small {
   max-height: 10vh;
+  align-self: center;
+}
+
+.g-gameboard-card-1 {
+  max-height: 24vh;
+  grid-column: 1;
+  background: green;
   align-self: center;
 }
 
@@ -334,13 +446,9 @@ body {
 }
 
 .g-gameboard-card-3 {
-  grid-area: 1/3/4/3;
-}
-
-.g-gameboard-next {
+  max-height: 24vh;
   grid-column: 3;
-  grid-row: 3;
-  background: darkgreen;
+  background: red;
   align-self: center;
 }
 
